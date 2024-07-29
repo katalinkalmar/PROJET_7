@@ -6,6 +6,9 @@ const multer = require("../middleware/multer-config");
 
 const booksCtrl = require('../controllers/books');
 
+// url: localhost:4000/api/books/
+// method: post
+// >>> function add book 
 
 // GET
 router.get('/', booksCtrl.getAllBooks);

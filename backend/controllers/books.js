@@ -4,15 +4,15 @@ const Thing = require('../models/thing');
 // import du package fs (file system)
 const fs = require('fs');
 
-
+// partie 2 cours 3
 // GET
 exports.getAllBooks = (req, res, next) => {
     Thing.find()
-        .then((things) => { res.status(200).json(things); })
+        .then((books) => { res.status(200).json(books); })
         .catch((error) => { res.status(400).json({ error: error }); });
 };
 
-
+// partie 2 cours 3
 // GET
 exports.getOneBook = (req, res, next) => {
     Thing.findOne({ _id: req.params.id })
