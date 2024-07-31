@@ -1,4 +1,4 @@
-const Thing = require('../models/thing');
+const Book = require('../models/book');
 
 
 // import du package fs (file system)
@@ -7,7 +7,7 @@ const fs = require('fs');
 // partie 2 cours 3
 // GET
 exports.getAllBooks = (req, res, next) => {
-    Thing.find()
+    Book.find()
         .then((books) => { res.status(200).json(books); })
         .catch((error) => { res.status(400).json({ error: error }); });
 };
@@ -15,14 +15,14 @@ exports.getAllBooks = (req, res, next) => {
 // partie 2 cours 3
 // GET
 exports.getOneBook = (req, res, next) => {
-    Thing.findOne({ _id: req.params.id })
-        .then((livre) => { res.status(200).json(livre); })
+    Book.findOne({ _id: req.params.id })
+        .then((book) => { res.status(200).json(book); })
         .catch((error) => { res.status(404).json({ error: error }); });
 };
 
 // GET
 exports.getBestRating = (req, res, next) => {
-    Thing.find().sort({ averageRating: -1 }).limit(3)
+    Book.find().sort({ averageRating: -1 }).limit(3)
         .then((books) => res.status(200).json(books))
         .catch((error) => res.status(404).json({ error }));
 };
@@ -35,7 +35,7 @@ exports.addBook = (req, res, next) => {
     delete bookObject._id;
     delete bookObject._userId;
 
-    const newBook = new Thing({
+    const newBook = new Book({
         ...bookObject,
         userId: req.auth.userId,
         imageUrl: `${req.protocol}://${req.get('host')}/images/resized_${req.file.filename}`,
@@ -49,20 +49,20 @@ exports.addBook = (req, res, next) => {
 
 
 // PUT
-exports.modifyThing = (req, res, next) => {
-    const thingObject = req.file ? {
-        ...JSON.parse(req.body.thing),
+exports.modifyBook = (req, res, next) => {
+    const bookObject = req.file ? {
+        ...JSON.parse(req.body.book),
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     } : { ...req.body };
 
-    delete thingObject._userId;
+    delete bookObject._userId;
 
-    Thing.findOne({ _id: req.params.id })
-        .then((thing) => {
-            if (thing.userId != req.auth.userId) {
+    Book.findOne({ _id: req.params.id })
+        .then((book) => {
+            if (book.userId != req.auth.userId) {
                 res.status(401).json({ message: 'Not authorized' });
             } else {
-                Thing.updateOne({ _id: req.params.id }, { ...thingObject, _id: req.params.id })
+                Book.updateOne({ _id: req.params.id }, { ...bookObject, _id: req.params.id })
                     .then(() => res.status(200).json({ message: 'Objet modifié!' }))
                     .catch(error => res.status(401).json({ error }));
             }
@@ -72,16 +72,16 @@ exports.modifyThing = (req, res, next) => {
 
 
 // DELETE
-exports.deleteThing = (req, res, next) => {
-    Thing.findOne({ _id: req.params.id })
-        .then(thing => {
-            if (thing.userId != req.auth.userId) {
+exports.deleteBook = (req, res, next) => {
+    Book.findOne({ _id: req.params.id })
+        .then(book => {
+            if (book.userId != req.auth.userId) {
                 res.status(401).json({ message: 'Not authorized' });
             } else {
-                const filename = thing.imageUrl.split('/images/')[1];
+                const filename = book.imageUrl.split('/images/')[1];
 
                 fs.unlink(`images/${filename}`, () => {
-                    Thing.deleteOne({ _id: req.params.id })
+                    Book.deleteOne({ _id: req.params.id })
                         .then(() => { res.status(200).json({ message: 'Objet supprimé !' }) })
                         .catch(error => res.status(401).json({ error }));
                 });
@@ -92,41 +92,40 @@ exports.deleteThing = (req, res, next) => {
 
 // POST ajout d'une note
 exports.createRating = (req, res, next) => {
-
+    // On vérifie que la note est comprise entre 0 et 5;
     if (0 <= req.body.rating <= 5) {
 
         const ratingObject = { ...req.body, grade: req.body.rating };
 
         delete ratingObject._id;
-
-        Thing.findOne({ _id: req.params.id })
+        //requête à la base de données pour récuperer un livre précis.
+        Book.findOne({ _id: req.params.id })
             .then(book => {
-
+                // On récupère toutes les notes émises par tous les utilisateurs. 
                 const newRatings = book.ratings;
                 const userIdArray = newRatings.map(rating => rating.userId);
-
+                //Je vérifie que l'utilisateur n'avait pas déjà mis de note.
                 if (userIdArray.includes(req.auth.userId)) {
 
                     res.status(403).json({ message: 'Not authorized' });
 
                 } else {
+                    //Je rajoute la note d'utilasateur aux notes existantes.
                     newRatings.push(ratingObject);
 
-                    const grades = newRatings.map(rating => rating.grade);
-
+                    // Calcul de la moyenne des notes
+                    const grades = newRatings.map(rating => rating.grade); //Liste des notes
                     let sum = 0;
-                    for (let i = 0; i < grades.length; i++) {
-                        sum += grades[i];
-                    }
+                    grades.map(grade => { sum += grade })
+                    const averageGrades = (sum / grades.length).toFixed(1);
 
-                    const averageGrades = sum / grades.length
-
-                    book.averageRating = averageGrades;
-
-                    Thing.updateOne({ _id: req.params.id }, { ratings: newRatings, averageRating: averageGrades, _id: req.params.id })
+                    // Je mets à jour la base de données
+                    Book.updateOne({ _id: req.params.id }, { ratings: newRatings, averageRating: averageGrades, _id: req.params.id })
                         .then(() => { res.status(201).json() })
                         .catch(error => { res.status(400).json({ error }) });
 
+                    //On renvoie le livre avec la note actualisée.
+                        book.averageRating = averageGrades;
                     res.status(200).json(book);
                 }
             })

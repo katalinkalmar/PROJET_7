@@ -3,6 +3,8 @@ const http = require('http');
 const app = require('./app');
 
 // Fonction de recherche de port valide
+//parseInt(val,10) convertit un string en integer, ici en base 10
+// val est une variable intermédiaire
 const normalizePort = val => {
     const port = parseInt(val, 10);
 
@@ -20,12 +22,12 @@ const port = normalizePort(process.env.PORT || '4000');
 // On enregistre le port valide dans l'app
 app.set('port', port);
 
-// Fonction de gestion d'erreur
+// Fonction de gestion d'erreur lors de l'écoute
 const errorHandler = error => {
     if (error.syscall !== 'listen') {
         throw error;
     }
-
+// bind est une chaîne de caractères qui représente l'adresse du liaison du serveur.
     const address = server.address();
     const bind = typeof address === 'string' ? 'pipe ' + address : 'port: ' + port;
 
@@ -47,7 +49,7 @@ const errorHandler = error => {
 // Création du serveur avec l'app
 const server = http.createServer(app);
 
-
+// server.on est une méthode en Node.js pour écouter le serveur.
 server.on('error', errorHandler);
 server.on('listening', () => {
     const address = server.address();

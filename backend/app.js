@@ -15,6 +15,7 @@ const path = require("path");
 const app = express()
 
 // Connexion à la base de données MongoDB
+// premier cours partie deux code de fin de cours
 mongoose.connect(
     `mongodb+srv://katalinkalmar:${apiKeys.password}@clusterprojetoc7.gwfc6w0.mongodb.net/?retryWrites=true&w=majority&appName=ClusterProjetOC7`,
     { useNewUrlParser: true, useUnifiedTopology: true })

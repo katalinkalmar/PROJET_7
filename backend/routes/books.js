@@ -20,10 +20,10 @@ router.post('/', auth, multer, multer.resizeImage, booksCtrl.addBook);
 router.post('/:id/rating', auth, booksCtrl.createRating);
 
 // PUT
-router.put('/:id', auth, booksCtrl.modifyThing);
+router.put('/:id', auth, booksCtrl.modifyBook);
 
 // DELETE
-router.delete('/:id', auth, booksCtrl.deleteThing);
+router.delete('/:id', auth, booksCtrl.deleteBook);
 
 
 module.exports = router;
