@@ -27,7 +27,10 @@ const errorHandler = error => {
     if (error.syscall !== 'listen') {
         throw error;
     }
-// bind est une chaîne de caractères qui représente l'adresse du liaison du serveur.
+// On récupère l'adresse réseau et le port sur lesquels le serveur écoute les requêtes:    
+// la variable bind est une chaîne de caractères représentant l'adresse du liaison du serveur.
+//Le ternaire vérifie. Si oui, l'adresse est un chemin de fichier.
+//si non, l'adresse est lié à un port TCP.
     const address = server.address();
     const bind = typeof address === 'string' ? 'pipe ' + address : 'port: ' + port;
 

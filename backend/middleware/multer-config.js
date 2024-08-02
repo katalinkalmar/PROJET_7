@@ -1,3 +1,7 @@
+//on utilise la bibliothèque multer pour le téléchargement des images pour les livres
+//sharp pour redimensionner les images
+//path pour pour gérer les chemins des fichiers
+//fs qui permet d'interagir avec le système des fichiers, ici pour en supprimer
 const multer = require('multer');
 const sharp = require('sharp');
 const path = require('path');
@@ -8,7 +12,10 @@ const MIME_TYPES = {
     'image/jpeg': 'jpg',
     'image/png': 'png'
 };
-
+// on configure le stockage des téléchargements
+//le callback indique à Multer d'enregistrer le fichier téléchargé dans le répertoire images.
+//Le callback est appelé avec null comme premier argument, indiquant qu'il n'y a pas d'erreur, 
+// et 'images', spécifie que le fichier doit être enregistré dans le répertoire images.
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
         callback(null, 'images');

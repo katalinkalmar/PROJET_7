@@ -1,5 +1,8 @@
+//j'importela bibliothèque Node.js qui gère les JSON Web Tokens. 
+//C'est un standard pour transmettre l'information de manière sécurisée
 const jwt = require('jsonwebtoken');
- 
+
+// On récupère l'en-tête d'autorisation de la requête HTTP avec le token JWT.
 module.exports = (req, res, next) => {
    try {
        const token = req.headers.authorization.split(' ')[1]; // On retire le mot Bearer
