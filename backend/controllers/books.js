@@ -1,10 +1,11 @@
 const Book = require('../models/book');
 
-
-// import du package fs (file system)
+// import du package fs (file system)-donne accès aux fonctions qui permettent
+// de modifier le système de fichiers, y compris aux fonctions permettant 
+//de supprimer les fichiers.
 const fs = require('fs');
 
-// partie 2 cours 3
+
 // GET
 exports.getAllBooks = (req, res, next) => {
     Book.find()
@@ -12,7 +13,7 @@ exports.getAllBooks = (req, res, next) => {
         .catch((error) => { res.status(400).json({ error: error }); });
 };
 
-// partie 2 cours 3
+
 // GET
 exports.getOneBook = (req, res, next) => {
     Book.findOne({ _id: req.params.id })
@@ -125,7 +126,7 @@ exports.createRating = (req, res, next) => {
                         .catch(error => { res.status(400).json({ error }) });
 
                     //On renvoie le livre avec la note actualisée.
-                        book.averageRating = averageGrades;
+                    book.averageRating = averageGrades;
                     res.status(200).json(book);
                 }
             })

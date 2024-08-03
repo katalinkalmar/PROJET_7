@@ -1,4 +1,4 @@
-//on utilise la bibliothèque multer pour le téléchargement des images pour les livres
+//on utilise Multer, un midleware Express pour le téléchargement des images pour les livres
 //sharp pour redimensionner les images
 //path pour pour gérer les chemins des fichiers
 //fs qui permet d'interagir avec le système des fichiers, ici pour en supprimer

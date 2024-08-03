@@ -25,7 +25,8 @@ mongoose.connect(
 // Ajout du Middleware Express JSON pour lire les JSON
 app.use(express.json());
 
-// Ajout du Middleware gérant les erreurs de CORS
+// Ajout du Middleware gérant les erreurs de CORS - Cross Origin Resourse Sharing,
+//c'est à dire les requêtes
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
