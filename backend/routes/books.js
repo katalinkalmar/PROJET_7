@@ -1,4 +1,4 @@
-//middleware d'authentification aplliqué aux routes des livres
+//middleware d'authentification appliqué aux routes des livres
 const express = require('express');
 // création d'une instance du routeur Express
 // pour regrouper les routes spécifiques aux livres.

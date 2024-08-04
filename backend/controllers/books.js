@@ -1,3 +1,4 @@
+//J'importe le modèle Book, il représentebla structure d'un document livre dans la base de données
 const Book = require('../models/book');
 
 // import du package fs (file system)-donne accès aux fonctions qui permettent
@@ -91,10 +92,12 @@ exports.deleteBook = (req, res, next) => {
         .catch(error => { res.status(500).json({ error }) });
 };
 
-// POST ajout d'une note
+// POST ajout d'une nouvelle note
+
 exports.createRating = (req, res, next) => {
     // On vérifie que la note est comprise entre 0 et 5;
     if (0 <= req.body.rating <= 5) {
+
 
         const ratingObject = { ...req.body, grade: req.body.rating };
 
@@ -111,7 +114,7 @@ exports.createRating = (req, res, next) => {
                     res.status(403).json({ message: 'Not authorized' });
 
                 } else {
-                    //Je rajoute la note d'utilasateur aux notes existantes.
+                    //Je rajoute la note d'utilisateur aux notes existantes.
                     newRatings.push(ratingObject);
 
                     // Calcul de la moyenne des notes
