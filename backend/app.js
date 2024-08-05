@@ -6,7 +6,7 @@ const apiKeys = require("./api_keys");
 
 // imports des routers
 const booksRoutes = require("./routes/books");
-const userRoutes = require("./routes/user");
+const userRoutes = require("./routes/user"); // c'est le fichier user dans le dossier routes!
 
 // import pour la gestion d'image
 const path = require("path");
