@@ -1,4 +1,4 @@
-//J'importe le modèle Book, il représentebla structure d'un document livre dans la base de données
+//J'importe le modèle Book, il représente la structure d'un document livre dans la base de données
 const Book = require('../models/book');
 
 // import du package fs (file system)-donne accès aux fonctions qui permettent
@@ -58,7 +58,8 @@ exports.modifyBook = (req, res, next) => {
     } : { ...req.body };
 
     delete bookObject._userId;
-
+    //JSON.parse convertit le JSON en objet JavaScript
+    // spread operator rajoute toutes les propriétés de objet obtenu et les ajoute à bookObject
     Book.findOne({ _id: req.params.id })
         .then((book) => {
             if (book.userId != req.auth.userId) {
@@ -98,7 +99,8 @@ exports.createRating = (req, res, next) => {
     // On vérifie que la note est comprise entre 0 et 5;
     if (0 <= req.body.rating <= 5) {
 
-
+        //le spread operator crée une nouvelle copie de req.body et ajoute à la copie 
+        //la propriété grade pour créer ratingObject.
         const ratingObject = { ...req.body, grade: req.body.rating };
 
         delete ratingObject._id;
@@ -119,8 +121,11 @@ exports.createRating = (req, res, next) => {
 
                     // Calcul de la moyenne des notes
                     const grades = newRatings.map(rating => rating.grade); //Liste des notes
+                    // on initialise la variable sum à zéro elle accumulera la somme de toutes les notes.
                     let sum = 0;
+                    // pour chaque note on ajoute sa valeur à la variable
                     grades.map(grade => { sum += grade })
+                    //on utilise toFixed(1)pour arrondir la moyenne à une décimale près.
                     const averageGrades = (sum / grades.length).toFixed(1);
 
                     // Je mets à jour la base de données

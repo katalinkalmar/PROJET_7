@@ -9,7 +9,7 @@ exports.signup = (req, res, next) => {
         .then(hash => {
             // Création d'une instance du modèle User
             const user = new User({ email: req.body.email, password: hash });
-            
+
             // Enregistrement dans la base de données
             user.save()
                 .then(() => res.status(201).json({ message: "Utilisateur créé !" }))
@@ -32,11 +32,7 @@ exports.login = (req, res, next) => {
                     }
                     res.status(200).json({
                         userId: user._id,
-                        token: jwt.sign(
-                            { userId: user._id },
-                            'RANDOM_TOKEN_SECRET',
-                            { expiresIn: '24h' }
-                        )
+                        token: jwt.sign({ userId: user._id }, 'RANDOM_TOKEN_SECRET', { expiresIn: '24h' })
                     });
                 })
                 .catch(error => res.status(500).json({ error }));
