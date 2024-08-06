@@ -11,7 +11,7 @@ const userRoutes = require("./routes/user"); // c'est le fichier user dans le do
 // import pour la gestion d'image
 const path = require("path");
 
-// Connexion à la base de données MongoDB
+// L'API se connecte à la base de données MongoDB
 mongoose.connect(
     `mongodb+srv://katalinkalmar:${apiKeys.password}@clusterprojetoc7.gwfc6w0.mongodb.net/?retryWrites=true&w=majority&appName=ClusterProjetOC7`,
     { useNewUrlParser: true, useUnifiedTopology: true })
